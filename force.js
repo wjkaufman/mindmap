@@ -55,7 +55,9 @@ function forceSimulation(nodes, links) {
       // .force("y", d3.forceY());
 }
 
+// create SVG
 const svg = d3.select('body').append('svg')
+  .attr('class', 'svg')
   .attr('width', width)
   .attr('height', height)
   .attr("viewBox", [-width / 2, -height / 2, width, height]);
