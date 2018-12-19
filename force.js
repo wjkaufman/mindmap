@@ -56,7 +56,7 @@ function forceSimulation(nodes, links) {
 }
 
 // create SVG
-const svg = d3.select('body').append('svg')
+const svg = d3.select('.vis').append('svg')
   .attr('class', 'svg')
   .attr('width', width)
   .attr('height', height)
@@ -64,7 +64,7 @@ const svg = d3.select('body').append('svg')
   .on('dblclick', function() {
     data.nodes.push({id: "New node", group: 1})
     
-    // TODO fill this in
+    loadData(data)
     
     console.log('double click event');
     console.log(data.nodes);
@@ -73,6 +73,9 @@ const svg = d3.select('body').append('svg')
 function loadData(d) {
   const links = data.links.map(d => Object.create(d));
   const nodes = data.nodes.map(d => Object.create(d));
+  
+  console.log('in load data, sick');
+  // console.log(nodes);
   
   function ticked() {
     link
@@ -89,23 +92,29 @@ function loadData(d) {
   const simulation = forceSimulation(nodes, links)
     .on("tick", ticked);
   
-  const link = svg.append("g")
-      .attr("stroke", "#999")
-      .attr("stroke-opacity", 0.6)
+  const link = svg
+    .append("g")
+      .attr("class", "links")
     .selectAll("line")
     .data(links)
     .enter().append("line")
+      .attr("stroke", "#999")
+      .attr("stroke-opacity", 0.6)
       .attr("stroke-width", d => Math.sqrt(d.value));
   
-  const node = svg.append("g")
-      .attr("stroke", "#fff")
-      .attr("stroke-width", 1.5)
+  const node = svg
+    .append("g")
+      .attr("class", "nodes")
     .selectAll("circle")
     .data(nodes)
     .enter().append("circle")
+      .attr("stroke", "#fff")
+      .attr("stroke-width", 1.5)
       .attr("r", 5)
       .attr("fill", color)
-      .call(drag(simulation));
+      .call(drag(simulation))
+    // .transition()
+    //   .duration(100)
   
   node.append("title")
       .text(d => d.id);
